@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Para Katherin, bajo las estrellas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sky-top: #070b22;
+    --sky-bottom: #24306a;
+    --moon: #f6efd2;
+    --moon-shade: #d9cfa3;
+    --star-pink: #ffb3c7;
+    --ink: #eef0ff;
+    --soft: #b7bff0;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --sky-top: #070b22; --sky-bottom: #24306a; }
+  }
+  :root[data-theme="dark"] { --sky-top: #070b22; --sky-bottom: #24306a; }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0; min-height: 100vh;
+    background: var(--sky-top);
+    background-image: linear-gradient(180deg, var(--sky-top) 0%, #111a45 55%, var(--sky-bottom) 100%);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+    overflow-x: hidden;
+  }
+
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute; border-radius: 50%; background: #fff;
+    animation: twinkle 3s ease-in-out infinite;
+  }
+  @keyframes twinkle { 0%,100% { opacity: .25; } 50% { opacity: 1; } }
+
+  .shoot {
+    position: fixed; top: 12%; left: -10%; z-index: 0; pointer-events: none;
+    width: 110px; height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0), #fff);
+    transform: rotate(22deg); opacity: 0;
+    animation: shoot 9s ease-in 3s infinite;
+  }
+  @keyframes shoot {
+    0%   { transform: translate(0,0) rotate(22deg); opacity: 0; }
+    3%   { opacity: 1; }
+    12%  { transform: translate(85vw, 34vw) rotate(22deg); opacity: 0; }
+    100% { transform: translate(85vw, 34vw) rotate(22deg); opacity: 0; }
+  }
+
+  main { position: relative; z-index: 1; }
+
+  /* ---------- Portada ---------- */
+  .intro {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center; padding: 32px 20px;
+  }
+  .intro.gone { display: none; }
+  .moon {
+    width: min(58vw, 230px); aspect-ratio: 1; border: 0; padding: 0; cursor: pointer;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 34% 30%, rgba(0,0,0,.10) 0 9%, transparent 10%),
+      radial-gradient(circle at 62% 58%, rgba(0,0,0,.09) 0 12%, transparent 13%),
+      radial-gradient(circle at 44% 74%, rgba(0,0,0,.08) 0 7%, transparent 8%),
+      radial-gradient(circle at 35% 30%, #fffbe6, var(--moon) 45%, var(--moon-shade));
+    box-shadow: 0 0 60px 12px rgba(246,239,210,.35), 0 0 160px 40px rgba(246,239,210,.15);
+    animation: breathe 5s ease-in-out infinite;
+  }
+  .moon:focus-visible { outline: 3px solid var(--star-pink); outline-offset: 10px; }
+  @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.04); } }
+  .intro h1 { font-size: clamp(2.6rem, 11vw, 3.6rem); font-weight: 600; margin: 40px 0 6px; line-height: 1.1; }
+  .intro p { margin: 0; font-size: 1.5rem; color: var(--soft); }
+
+  /* ---------- Carta ---------- */
+  .letter { display: none; padding: 56px 22px 90px; }
+  .letter.show { display: block; }
+  .page { width: min(100%, 560px); margin: 0 auto; }
+  .page h2 { font-size: clamp(2.8rem, 12vw, 4rem); font-weight: 700; margin: 0 0 26px; color: var(--star-pink); line-height: 1.05; }
+  .line {
+    font-size: clamp(1.55rem, 5.4vw, 1.9rem); line-height: 1.45; margin: 0 0 1em;
+    opacity: 0; transform: translateY(14px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .line.in { opacity: 1; transform: none; }
+  .line.big { font-weight: 600; color: var(--moon); }
+
+  .const { display: block; width: min(80%, 300px); margin: 40px auto 6px; overflow: visible; }
+  .const .link {
+    fill: none; stroke: var(--star-pink); stroke-width: 1.4; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 520; stroke-dashoffset: 520;
+    filter: drop-shadow(0 0 4px rgba(255,179,199,.7));
+  }
+  .const .dot { fill: #fff; opacity: 0; transition: opacity .6s ease; }
+  .const.in .link { animation: draw 4.5s ease forwards; }
+  .const.in .dot { opacity: 1; transition-delay: 1s; }
+  @keyframes draw { to { stroke-dashoffset: 0; } }
+  .names { text-align: center; font-size: 1.7rem; color: var(--soft); margin: 0 0 30px; }
+
+  .sign { text-align: right; margin-top: 10px; }
+  .sign .small { font-size: 1.5rem; color: var(--soft); margin: 0; }
+  .sign .name { font-size: 3rem; font-weight: 700; color: var(--star-pink); margin: 0; line-height: 1.1; }
+
+  .actions { margin-top: 44px; text-align: center; }
+  .btn {
+    font: inherit; font-size: 1.4rem; color: var(--ink); background: transparent;
+    border: 1.5px solid var(--soft); border-radius: 999px; padding: 8px 26px; cursor: pointer;
+  }
+  .btn:hover { background: rgba(183,191,240,.14); }
+  .btn:focus-visible { outline: 3px solid var(--star-pink); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .star, .moon, .shoot { animation: none; }
+    .shoot { display: none; }
+    .line { transition-duration: .01s; }
+    .const.in .link { animation-duration: .01s; }
+  }
+</style>
+</head>
+<body>
+<div id="stars" aria-hidden="true"></div>
+<div class="shoot" aria-hidden="true"></div>
+
+<main>
+  <section class="intro" id="intro">
+    <button class="moon" id="moon" type="button" aria-label="Abrir la carta de Everson para Katherin"></button>
+    <h1>Para Katherin</h1>
+    <p>Toca la luna</p>
+  </section>
+
+  <section class="letter" id="letter">
+    <div class="page">
+      <h2>Katherin,</h2>
+      <p class="line big">Hay personas que llegan sin hacer ruido y, de pronto, todo tiene otro color. Así llegaste tú.</p>
+      <p class="line">Me gusta cómo te ríes cuando crees que nadie te está mirando. Me gusta tu manera de hacer que los días difíciles pesen menos y que los buenos parezcan una fiesta.</p>
+      <p class="line">No sé si te lo digo lo suficiente, así que lo escribo: gracias por tu paciencia, por tu ternura y por quedarte incluso en mis días más torpes.</p>
+      <p class="line">Contigo aprendí que el amor no siempre es grande y ruidoso. A veces es un mensaje en la mañana, una mano que se busca en silencio, una comida compartida sin prisa.</p>
+      <p class="line">Si pudiera pedir un deseo, sería este: que tengamos muchos años más de risas, de viajes, de cafés fríos por hablar demasiado y de ganas de seguir eligiéndonos.</p>
+      <p class="line big">Te quiero hoy, te voy a querer mañana, y voy a intentar demostrártelo todos los días.</p>
+
+      <svg class="const line" id="const" viewBox="0 0 200 180" role="img" aria-label="Un corazón hecho de estrellas">
+        <polyline class="link" points="100,160 40,100 25,65 40,35 70,30 100,55 130,30 160,35 175,65 160,100 100,160"/>
+        <g class="dots">
+          <circle class="dot" cx="100" cy="160" r="3"/>
+          <circle class="dot" cx="40" cy="100" r="2.4"/>
+          <circle class="dot" cx="25" cy="65" r="3"/>
+          <circle class="dot" cx="40" cy="35" r="2.4"/>
+          <circle class="dot" cx="70" cy="30" r="3"/>
+          <circle class="dot" cx="100" cy="55" r="2.4"/>
+          <circle class="dot" cx="130" cy="30" r="3"/>
+          <circle class="dot" cx="160" cy="35" r="2.4"/>
+          <circle class="dot" cx="175" cy="65" r="3"/>
+          <circle class="dot" cx="160" cy="100" r="2.4"/>
+        </g>
+      </svg>
+      <p class="names line">Katherin y Everson</p>
+
+      <div class="sign line">
+        <p class="small">Con todo mi amor, tuyo para siempre,</p>
+        <p class="name">Everson</p>
+      </div>
+
+      <div class="actions">
+        <button class="btn" id="again" type="button">Volver a la luna</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+(function () {
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var sky = document.getElementById('stars');
+  for (var i = 0; i < 130; i++) {
+    var s = document.createElement('span');
+    s.className = 'star';
+    var size = Math.random() < 0.85 ? 1 + Math.random() * 1.5 : 2.5 + Math.random() * 1.5;
+    s.style.width = s.style.height = size + 'px';
+    s.style.left = Math.random() * 100 + '%';
+    s.style.top = Math.random() * 100 + '%';
+    s.style.animationDelay = (Math.random() * 4) + 's';
+    s.style.animationDuration = (2 + Math.random() * 3) + 's';
+    sky.appendChild(s);
+  }
+
+  var intro = document.getElementById('intro');
+  var letter = document.getElementById('letter');
+  var items = letter.querySelectorAll('.line');
+  var io = null;
+
+  function watch() {
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('in'); });
+      return;
+    }
+    io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.35 });
+    items.forEach(function (el) { io.observe(el); });
+  }
+
+  document.getElementById('moon').addEventListener('click', function () {
+    intro.classList.add('gone');
+    letter.classList.add('show');
+    window.scrollTo(0, 0);
+    watch();
+  });
+
+  document.getElementById('again').addEventListener('click', function () {
+    if (io) io.disconnect();
+    items.forEach(function (el) { el.classList.remove('in'); });
+    letter.classList.remove('show');
+    intro.classList.remove('gone');
+    window.scrollTo(0, 0);
+  });
+})();
+</script>
+</body>
+</html>
